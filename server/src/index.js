@@ -24,7 +24,7 @@ app.post("/searchUser", (req, res) => {
 app.post("/getUserTweets", (req, res) => {
   console.log("body", req.headers);
 
-  let {screen_name, user_id} = req.headers;
+  let { screen_name, user_id } = req.headers;
   console.log(screen_name, user_id);
   T.get(
     "statuses/user_timeline",
@@ -32,6 +32,29 @@ app.post("/getUserTweets", (req, res) => {
     (err, data, response) => {
       res.send(
         data.map((tweet) => ({
+          created_at: tweet.created_at,
+          text: tweet.text,
+          screen_name: tweet.user.screen_name,
+          name: tweet.user.name,
+          profile_image: tweet.user.profile_image_url,
+          retweet_count: tweet.retweet_count,
+          favorite_count: tweet.favorite_count,
+        }))
+      );
+    }
+  );
+});
+
+app.post("/getTweetsWithHashtag", (req, res) => {
+
+  T.get(
+    "search/tweets",
+    {
+      q: req.headers.query,
+    },
+    (err, data, response) => {
+      res.send(
+        data.statuses.map((tweet) => ({
           created_at: tweet.created_at,
           text: tweet.text,
           screen_name: tweet.user.screen_name,
