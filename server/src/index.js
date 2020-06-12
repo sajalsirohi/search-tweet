@@ -46,7 +46,7 @@ app.post("/getUserTweets", (req, res) => {
 });
 
 app.post("/getTweetsWithHashtag", (req, res) => {
-
+  console.log(req.headers);
   T.get(
     "search/tweets",
     {
